@@ -1,0 +1,15 @@
+ALTER TABLE postac modify rodzaj;
+CREATE TABLE marynarz LIKE postac;
+CREATE TABLE marynarz SELECT * FROM postac;
+a)
+b) DROP * FROM postac where nazwa='Bjorn';
+c) DROP * FROM statki;
+d) DROP statek;
+e) CREATE TABLE zwierz (PRIMARY KEY AUTO_INCREMENT, nazwa varchar(30), wiek INT);
+
+INSERT INTO zwierz SELECT id_postaci, nazwa, wiek FROM
+CREATE TABLE kreatura SELECT * FROM wikingowie.kreatura;
+#rozny od != lub <>
+SELECT * FROM zasob;
+SELECT * FROM zasob WHERE typ="jedzenie";
+SELECT zasob.idZasobu, ilosc FROM kreatura WHERE kreatura.idKreatury=1 AND kreatura.idKreatury=3 AND kreatura.idKreatury=5;
