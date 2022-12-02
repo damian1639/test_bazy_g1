@@ -1,0 +1,58 @@
+select dataPozyskania
+,year(dataPozyskania)
+,month(dataPozyskania)
+,monthname(dataPozyskania)
+,day(dataPozyskania)
+from zasob;
+
+select * from zasob where month(dataPozyskania) in (7,8);
+
+select * from zasob where rodzaj is not null;
+
+# order by wiek ASC, rodzaj DESC;
+
+select * from kreatura order by dataUr limit 5;
+
+select concat("Nazywam sie", nazwa) from kreatura;
+
+select nazwa, ilosc * waga, dataPozyskania from zasob
+where year(dataPozyskania) between 2000 and 2007;
+
+select nazwa
+,(ilosc*waga)*0.7 as waga_netto
+,(ilosc*waga)*0.3 as odpadki
+from zasob;
+
+select sum(udzwig) from kreatura;
+select avg(udzwig) from kreatura;
+select max(udzwig) from kreatura;
+select min(udzwig) from kreatura;
+select count(udzwig) from kreatura;
+select count(*) from kreatura;
+
+
+select avg(waga) from kreatura where rodzaj='wiking';
+
+select rodzaj, avg(waga), count(*) from kreatura group by rodzaj;
+
+select rodzaj, avg(2022 - YEAR(dataUr)) as wiek from kreatura group by rodzaj;
+
+select rodzaj, sum(waga*ilosc)
+from zasob group by rodzaj;
+
+select rodzaj, count(nazwa) from kreatura
+group by rodzaj having count(nazwa) > 1;
+
+select nazwa, avg(waga), sum(ilosc) from zasob
+group by nazwa having avg(waga) > 10;
+
+select nazwa, avg(waga), sum(ilosc) from zasob
+group by nazwa having avg(waga) > 10 and sum(ilosc) >= 4;
+
+select * from kreatura k
+left join ekwipunek e on k.idKreatury=e.idKreatury
+where e.idEkwipunku is null;
+
+select idKreatury from kreatura;
+select distinct idKreatury from ekwipunek
+where idKreatury is not null;
