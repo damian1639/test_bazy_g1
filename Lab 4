@@ -1,0 +1,60 @@
+zad 1 
+a) 
+delete from postac where rodzaj="wiking" order by wiek desc limit 2;
+delete from postac where id_postaci= 3;
+b)
+alter table postac drop primary key
+alter table przetwory drop foreign key przetwory_ibfk_1;
+alter table walizka drop foreign key walizka_ibfk_1;
+alter table przetwory drop foreign key przetwory_ibfk_2;
+alter table postac modify id_postaci int;
+alter table postac drop primary key;
+
+zad 2
+a)
+alter table postac add pesel varchar(11) first;
+update postac set pesel="00000000000";
+alter table postac add primary key(pesel);
+b)
+alter table postac modify rodzaj enum("wiking","ptak","kobieta","syrena");
+c)
+insert into postac values("12345678901",9,"Gertruda Nieszczera","syrena","1900-12-28",120,null,null);
+
+zad 3
+a)
+update postac set statek = 'Statek Bjorna' where nazwa LIKE '%a%';
+b)
+update statek set max_ladownosc=max_ladownosc*0.7
+where data_wodowania >= '1901-01-01'
+and data_wodowania <= '2000-12-31';
+##where year(data_wodowania) between 1901 and 2000
+c)
+select nazwa, wiek from postac where wiek < 1000;
+
+zad 4
+a)
+ALTER TABLE postac modify rodzaj enum("wiking","ptak","kobieta","syrena","waz");
+insert into postac values("12345678121",10,"Loko","waz","1322-11-11",700,null,null);
+b)
+create table marynarz like postac;
+insert into marynarz select * from postac where statek is not null;
+## create table marynarz select * from postac;
+c)
+alter table marynarz add primary key (id_postaci);
+alter table marynarz add foreign key (pesel) references postac(pesel);
+
+
+zad 5
+a)
+update postac set statek=null where id_postaci in(1,2,3,4,7,8);
+b)
+delete from postac where id_postaci=4;
+c)
+alter table postac drop foreign key postac_ibfk_1;
+alter table postac drop column statek;
+d)
+drop table statek;
+e)
+create table zwierz(id int auto_increment primary key, nazwa varchar(30),wiek int unsigned );
+f)
+insert into zwierz select id_postaci,nazwa,wiek from postac where rodzaj in ("ptak","waz");
