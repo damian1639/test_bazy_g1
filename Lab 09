@@ -1,0 +1,50 @@
+P1
+
+1.select imie,nazwisko, data_urodzenia from pracownik
+2.select imie,nazwisko, (2023-year(data_urodzenia)) as wiek from pracownik
+3.select d.nazwa,count(*) from dzial d join pracownik p on d.id_dzialu=p.dzial group by dzial
+4.select nazwa_kategori, count(id_towaru) from kategoria k join towar t on t.kategoria=k.id_kategori group by nazwa_kategori
+5.SELECT k.nazwa_kategori, group_concat(t.nazwa_towaru) 
+FROM kategoria k JOIN towar t ON t.kategoria=k.id_kategori 
+GROUP BY k.id_kategori;
+6.Select round(avg(pensja), 2) as sr_pensja from pracownik;
+7.Select round(avg(pensja), 2) as sr_pensja from pracownik where year(now())-year(data_zatrudnienia)>=5;
+8.Select t.nazwa_towaru, count(pz.towar) as ilosc from pozycja_zamowienia pz 
+join towar t on pz.towar=t.id_towaru
+group by towar order by ilosc desc limit 10;
+9.select z.numer_zamowienia, sum(pz.ilosc*pz.cena) as wartosc from pozycja_zamowienia pz 
+join zamowienie z on pz.zamowienie=z.id_zamowienia 
+where year(z.data_zamowienia)=2017 and month(z.data_zamowienia) between 1 and 3
+group by zamowienie;
+10.select p.imie, p.nazwisko, sum(pz.ilosc*pz.cena) as wartosc from pracownik p 
+join zamowienie z on p.id_pracownika=z.pracownik_id_pracownika 
+join pozycja_zamowienia pz on z.id_zamowienia=pz.zamowienie 
+group by p.id_pracownika order by wartosc desc;
+
+P2
+
+1.Select d.nazwa ,min(p.pensja) as min, max(p.pensja) as max, round(avg(p.pensja),2) as srednia from pracownik p
+join dzial d on p.dzial=d.id_dzialu group by d.id_dzialu;
+2.select kl.pelna_nazwa, sum(pz.ilosc*pz.cena) as wartosc from klient kl
+join zamowienie z on kl.id_klienta=z.klient
+join pozycja_zamowienia pz on z.id_zamowienia=pz.zamowienie
+group by kl.id_klienta order by wartosc desc limit 10;
+3.Select year(z.data_zamowienia) as rok, round(sum(pz.ilosc*pz.cena),2) as wartosc from zamowienie z 
+join pozycja_zamowienia pz on z.id_zamowienia=pz.zamowienie
+where status_zamowienia=5
+group by rok order by wartosc desc;
+4.SELECT round(sum(pz.ilosc*pz.cena),2) as 'wartosc' 
+FROM zamowienie z JOIN status_zamowienia sz 
+ON sz.id_statusu_zamowienia=z.status_zamowienia
+JOIN pozycja_zamowienia pz 
+ON pz.zamowienie=z.id_zamowienia 
+WHERE sz.nazwa_statusu_zamowienia="anulowane";
+7.Select year(z.data_zamowienia) as rok, (sum(pz.ilosc*pz.cena)-(pz.ilosc*t.cena_zakupu)) as dochod 
+from zamowienie z 
+join pozycja_zamowienia pz on z.id_zamowienia=pz.zamowienie
+join towar t on pz.towar=t.id_towaru
+where z.status_zamowienia=5
+group by rok;
+9.Select monthname(data_urodzenia) as miesiac, count(id_pracownika) as ilosc from pracownik 
+group by month(data_urodzenia) order by month(data_urodzenia) asc;
+10.Select imie, nazwisko, (timestampdiff(month, data_zatrudnienia, now())*pensja) as ile from pracownik group by id_pracownika;
