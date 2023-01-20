@@ -1,0 +1,75 @@
+zad 1
+tworzenie tabeli postac
+1.
+create table postac (
+id_postaci int auto_increment primary key,
+nazwa varchar(40),
+rodzaj enum("wiking","ptak","kobieta"),
+data_ur date,
+wiek int unsigned);
+
+show tables;
+desc tables;
+2.
+insert into postac values(null,"Bjorn","wiking","1672-12-28",300);
+insert into postac values(null,"Drozd","ptak","1700-10-25",290);
+insert into postac values(null,"Tesciowa","kobieta","1500-07-13",500);
+3.
+update postac set wiek=88 where id_postaci=3;
+select * from postac;
+
+zad 2
+1.
+create table walizka (id_walizki int auto_increment primary key,pojemnosc int unsigned,kolor enum("rozowy","czerwony","teczowy","zolty"),id_wlasciciela int, 
+foreign key (id_wlasciciela) references postac(id_postaci));
+alter table walizka drop foreign key walizka_ibfk_1;
+alter table walizka add foreign key (id_wlasciciela) references postac(id_postaci) on delete cascade;
+2.
+alter table walizka alter kolor set default 'rozowy';
+3.
+insert into walizka values(null,20,"czerwony",1);
+insert into walizka values(null,50,default,3);
+
+\\on delete set null
+
+zad3
+1.
+create table izba(adres_budynku varchar(30),nazwa_izby varchar(30), metraz int unsigned,wlasciciel int, foreign key (wlasciciel) references postac(id_postaci) on delete set null, primary key (adres_budynku,nazwa_izby));
+2.
+alter table izba add column kolor varchar(30) default "czarny" after metraz;
+3.
+insert into izba values("Sloneczna 21","spizarnia",200,default,1);
+
+zad 4
+1.
+create table przetwory(id_przetworu int auto_increment primary key,rok_produkcji int default "1654",id_wykonawcy int, zawartosc varchar(50), dodatek varchar(30) default "chilli", id_konsumenta int, foreign key (id_wykonawcy) references postac(id_postaci), foreign key (id_konsumenta) references postac(id_postaci) );
+2.
+insert into przetwory values(1,default,1,"Bigos z papryczka chilli",default,3);
+
+zad5
+1.
+insert into postac values(null,"Dis","wiking","1685-04-17",280);
+insert into postac values(null,"Mjolnir","wiking","1635-02-11",350);
+insert into postac values(null,"Arara","wiking","1410-10-12",650);
+insert into postac values(null,"Owczarzak","wiking","1710-02-19",200);
+insert into postac values(null,"Agnar","wiking","1720-09-09",190);
+2.
+create table statek(nazwa_statku varchar(70) primary key,rodzaj_statku enum("duzy","maly"),data_wodowania date,max_ladownosc int unsigned);
+3.
+insert into statek values("Czarna perla","maly","1750-10-10",3);
+insert into statek values("Titanic","duzy","1749-11-11",6);
+4.
+alter table postac add column funkcja varchar(40);
+5.
+update postac set funkcja="kapitan" where nazwa="Bjorn";
+update postac set funkcja="kapitan" where nazwa="Owczarzak";
+6.
+alter table postac add statek varchar(70);
+alter table postac add foreign key (statek) references statek(nazwa_statku);
+7.
+update postac set statek="Czarna Perla" where id_postaci in (1,2,4);
+update postac set statek="Titanic" where id_postaci in (5,6,7,8);
+8.
+delete from izba where nazwa_izby="spizarnia";
+9.
+drop table izba;
